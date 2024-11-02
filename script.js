@@ -36,7 +36,7 @@ function displayPage(page) {
         const tr = document.createElement('tr');
         row.forEach(cell => {
             const td = document.createElement('td');
-            td.textContent = cell.trim();
+            td.textContent = cell.trim() || "Sin datos";  // Si la celda está vacía, muestra "Sin datos"
             tr.appendChild(td);
         });
         tableBody.appendChild(tr);
@@ -67,4 +67,3 @@ function searchTable(event) {
 }
 
 loadCSV();
-

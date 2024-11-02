@@ -2,11 +2,12 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 10px;
-    background-color: #f4f4f9;
+    background-color: #1e1e1e;
+    color: #f4f4f4;
 }
 h1 {
     text-align: center;
-    color: #333;
+    color: #f4f4f4;
 }
 .search-bar {
     max-width: 400px;
@@ -19,7 +20,8 @@ h1 {
     font-size: 16px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #333;
+    color: #f4f4f4;
 }
 .table-container {
     overflow-x: auto;
@@ -28,23 +30,40 @@ h1 {
 table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #2b2b2b;
 }
 th, td {
     padding: 12px;
     text-align: left;
-    border: 1px solid #ddd;
+    border: 1px solid #444;
 }
 th {
-    background-color: #007acc;
-    color: white;
-    position: sticky;
-    top: 0;
+    background-color: #333;
+    color: #f4f4f4;
+    font-weight: bold;
 }
 tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #1f1f1f;
 }
+
+/* Etiquetas de colores para categorías */
+.tag {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+}
+.tag-pregrado { background-color: #e57373; }
+.tag-posgrado { background-color: #ffb74d; }
+.tag-capacitaciones { background-color: #81c784; }
+.tag-total { background-color: #64b5f6; }
+.tag-parcial { background-color: #ba68c8; }
+.tag-presencial { background-color: #ff7043; }
+.tag-virtual { background-color: #4db6ac; }
+
+/* Estilo para la paginación */
 .pagination {
     text-align: center;
     margin: 20px 0;
@@ -59,7 +78,7 @@ tr:nth-child(even) {
     cursor: pointer;
 }
 .pagination button:disabled {
-    background-color: #ddd;
+    background-color: #555;
     cursor: not-allowed;
 }
 
@@ -72,4 +91,3 @@ tr:nth-child(even) {
         padding: 8px;
     }
 }
-

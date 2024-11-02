@@ -7,7 +7,6 @@ async function loadCSV() {
         const response = await fetch('becas.csv');
         const csvData = await response.text();
 
-        // Usamos Papa Parse para procesar el CSV de manera robusta
         Papa.parse(csvData, {
             header: true,
             skipEmptyLines: true,
@@ -42,15 +41,49 @@ function displayPage(page) {
 
     pageData.forEach(row => {
         const tr = document.createElement('tr');
-        Object.values(row).forEach(cell => {
+        Object.entries(row).forEach(([key, cell]) => {
             const td = document.createElement('td');
-            td.textContent = cell ? cell.trim() : "Sin datos"; // Si la celda está vacía, muestra "Sin datos"
+            const cellText = cell ? cell.trim() : "Sin datos";
+            
+            // Aplicar clases de etiqueta según el valor de la celda
+            td.innerHTML = applyTagClasses(key, cellText);
             tr.appendChild(td);
         });
         tableBody.appendChild(tr);
     });
 
     updatePaginationInfo();
+}
+
+function applyTagClasses(key, cellText) {
+    // Asigna clases basadas en categorías
+    let className = '';
+    switch (cellText.toLowerCase()) {
+        case 'pregrado':
+            className = 'tag tag-pregrado';
+            break;
+        case 'posgrado':
+            className = 'tag tag-posgrado';
+            break;
+        case 'cursos y capacitaciones':
+            className = 'tag tag-capacitaciones';
+            break;
+        case 'total':
+            className = 'tag tag-total';
+            break;
+        case 'parcial':
+            className = 'tag tag-parcial';
+            break;
+        case 'presencial':
+            className = 'tag tag-presencial';
+            break;
+        case 'virtual':
+            className = 'tag tag-virtual';
+            break;
+        default:
+            return cellText;
+    }
+    return `<span class="${className}">${cellText}</span>`;
 }
 
 function updatePaginationInfo() {

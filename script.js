@@ -5,12 +5,19 @@ const rowsPerPage = 5;
 async function loadCSV() {
     try {
         const response = await fetch('becas.csv');
-        const textData = await response.text();
-        data = textData.split('\n').map(row => row.split(','));
+        const csvData = await response.text();
 
-        displayHeaders();
-        displayPage(currentPage);
-        document.getElementById('searchInput').addEventListener('input', searchTable);
+        // Usamos Papa Parse para procesar el CSV de manera robusta
+        Papa.parse(csvData, {
+            header: true,
+            skipEmptyLines: true,
+            complete: function(results) {
+                data = results.data;
+                displayHeaders();
+                displayPage(currentPage);
+                document.getElementById('searchInput').addEventListener('input', searchTable);
+            }
+        });
     } catch (error) {
         console.error('Error al cargar el archivo CSV:', error);
     }
@@ -18,7 +25,8 @@ async function loadCSV() {
 
 function displayHeaders() {
     const headerRow = document.getElementById('headerRow');
-    data[0].forEach(header => {
+    const headers = Object.keys(data[0]);
+    headers.forEach(header => {
         const th = document.createElement('th');
         th.textContent = header.trim();
         headerRow.appendChild(th);
@@ -28,15 +36,15 @@ function displayHeaders() {
 function displayPage(page) {
     const tableBody = document.getElementById('tableBody');
     tableBody.innerHTML = '';
-    const start = (page - 1) * rowsPerPage + 1;
+    const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const pageData = data.slice(start, end);
 
     pageData.forEach(row => {
         const tr = document.createElement('tr');
-        row.forEach(cell => {
+        Object.values(row).forEach(cell => {
             const td = document.createElement('td');
-            td.textContent = cell.trim() || "Sin datos";  // Si la celda está vacía, muestra "Sin datos"
+            td.textContent = cell ? cell.trim() : "Sin datos"; // Si la celda está vacía, muestra "Sin datos"
             tr.appendChild(td);
         });
         tableBody.appendChild(tr);
@@ -46,9 +54,9 @@ function displayPage(page) {
 }
 
 function updatePaginationInfo() {
-    document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${Math.ceil((data.length - 1) / rowsPerPage)}`;
+    document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${Math.ceil(data.length / rowsPerPage)}`;
     document.getElementById('prevPage').disabled = currentPage === 1;
-    document.getElementById('nextPage').disabled = currentPage >= Math.ceil((data.length - 1) / rowsPerPage);
+    document.getElementById('nextPage').disabled = currentPage >= Math.ceil(data.length / rowsPerPage);
 }
 
 function changePage(direction) {
@@ -58,8 +66,8 @@ function changePage(direction) {
 
 function searchTable(event) {
     const filter = event.target.value.toLowerCase();
-    const filteredData = data.filter((row, index) => 
-        index === 0 || row.some(cell => cell.toLowerCase().includes(filter))
+    const filteredData = data.filter(row =>
+        Object.values(row).some(cell => cell && cell.toLowerCase().includes(filter))
     );
     data = filteredData.length ? filteredData : data;
     currentPage = 1;

@@ -5,7 +5,9 @@ const rowsPerPage = 5;
 async function loadCSV() {
     try {
         const response = await fetch('becas.csv');
-        const csvData = await response.text();
+        const buffer = await response.arrayBuffer();
+        const decoder = new TextDecoder('utf-8');  // Forzar UTF-8 explícitamente
+        const csvData = decoder.decode(buffer);
 
         Papa.parse(csvData, {
             header: true,
@@ -107,4 +109,4 @@ function searchTable(event) {
     displayPage(currentPage);
 }
 
-loadCSV();
+loadC
